@@ -1,7 +1,8 @@
-let number1;
-let number2;
+let number1 = "";
+let number2 = "";
 let operator;
 let isSecondNumber = false;
+let calculated = false;
 
 function add(a, b){
     return a + b;
@@ -21,26 +22,27 @@ function divide(a, b){
 
 function operate(number1, number2, operator){
     if (operator == "+") {
-        let result = add(number1, number2);
-        console.log("Add: ", result);
+        return add(number1, number2);
     }
     else if (operator == "-") {
-        let result = subtract(number1, number2);
-        console.log("Sub: ", result);
+        return subtract(number1, number2);
     }
     else if (operator == "÷") {
-        let result = divide(number1, number2);
-        console.log("Divide: ", result);
+        if (number2 == 0){
+            alert("Nice try, but division by zero is beyond the laws of mathematics — and common sense");
+        }
+        return divide(number1, number2);
     }
     else if (operator == "x") {
-        let result = multiply(number1, number2);
-        console.log("Multiply: ", result);
+        return multiply(number1, number2);
     }
 }
 
 const display = document.querySelector(".screen");
 const operand1 = document.createElement("div");
 const operand2 = document.createElement("div");
+const screenOperator = document.createElement("div");
+const screenResult = document.createElement("div");
 
 const buttons = document.querySelectorAll("button");
 buttons.forEach(button => {
@@ -50,65 +52,141 @@ buttons.forEach(button => {
                 number1 = "";
                 number2 = "";
                 operator = "";
+                display.textContent = "";
                 isSecondNumber = false;
-                operand1.textContent = "";
-                operand2.textContent = "";
-                display.appendChild(operand1);
-                display.appendChild(operand2);
                 break;
             case "←":
-                console.log("Backspace");
-                operator = "←";
-                operand2.textContent = "";
-                display.appendChild(operand2);
+                if (screenResult.textContent != "") {
+                    number1 = "";
+                    number2 = "";
+                    operator = "";
+                    display.textContent = "";
+                    isSecondNumber = false;
+                    break;
+                }
+            
+                if (isSecondNumber && number2 !== "") {
+                    number2 = number2.slice(0, -1);
+                    operand2.textContent = number2;
+                    display.textContent = number1 + operator + number2;
+                } else if (!isSecondNumber && number1 !== "") {
+                    number1 = number1.slice(0, -1);
+                    operand1.textContent = number1;
+                    display.textContent = number1;
+                }
                 break;
             case "÷":
-                console.log("Divide");
+                if (operator){
+                    display.textContent = "";
+                    number1 = parseFloat(number1);
+                    number2 = parseFloat(number2);
+                    const result = operate(number1, number2, operator);
+                    screenResult.textContent = result;
+                    display.appendChild(screenResult);
+                    number1 = result;
+                    number2 = "";
+                    screenOperator.textContent = "÷";
+                    display.appendChild(screenOperator);
+                    isSecondNumber = false;
+                }
                 operator = "÷";
-                values.textContent = "÷";
-                display.appendChild(values);
+                screenOperator.textContent = "÷";
+                display.appendChild(screenOperator);
+                isSecondNumber = true;
                 break;
             case "x":
-                console.log("Multiply");
+                if (operator){
+                    display.textContent = "";
+                    number1 = parseFloat(number1);
+                    number2 = parseFloat(number2);
+                    const result = operate(number1, number2, operator);
+                    screenResult.textContent = result;
+                    display.appendChild(screenResult);
+                    number1 = result;
+                    number2 = "";
+                    screenOperator.textContent = "x";
+                    display.appendChild(screenOperator);
+                    isSecondNumber = false;
+                }
                 operator = "x";
-                values.textContent = "x";
-                display.appendChild(values);
+                screenOperator.textContent = "x";
+                display.appendChild(screenOperator);
+                isSecondNumber = true;
                 break;
             case "-":
-                console.log("Subtract");
-                operator = "-";
-                values.textContent = "-";
-                display.appendChild(values);
-                break;
+                if (operator){
+                    display.textContent = "";
+                    number1 = parseFloat(number1);
+                    number2 = parseFloat(number2);
+                    const result = operate(number1, number2, operator);
+                    screenResult.textContent = result;
+                    display.appendChild(screenResult);
+                    number1 = result;
+                    number2 = "";
+                    screenOperator.textContent = "-";
+                    display.appendChild(screenOperator);
+                    isSecondNumber = false;
+                }
+                else {
+                    operator = "-";
+                    screenOperator.textContent = "-";
+                    display.appendChild(screenOperator);
+                    isSecondNumber = true;
+                    break;
+                }
             case "+":
-                console.log("Add");
+                if (operator){
+                    display.textContent = "";
+                    number1 = parseFloat(number1);
+                    number2 = parseFloat(number2);
+                    const result = operate(number1, number2, operator);
+                    screenResult.textContent = result;
+                    display.appendChild(screenResult);
+                    number1 = result;
+                    number2 = "";
+                    screenOperator.textContent = "+";
+                    display.appendChild(screenOperator);
+                    isSecondNumber = false;
+                }
                 operator = "+";
-                values.textContent = "+";
-                display.appendChild(values);
+                screenOperator.textContent = "+";
+                display.appendChild(screenOperator);
+                isSecondNumber = true;
                 break;
             case "=":
                 console.log("Equal");
                 if (number1 && number2 && operator) {
                     number1 = parseFloat(number1);
                     number2 = parseFloat(number2);
-                    values.textContent = operate(number1, number2, operator);
-                    display.appendChild(values);
+                    const result = operate(number1, number2, operator);
+                    screenResult.textContent = result;
+                    display.textContent = "";
+                    display.appendChild(screenResult);
+                    calculated = true;
                 }
                 break;
             case ".":
-                console.log("Decimal point");
                 operator = ".";
                 break;
             default:
+                if (calculated) {
+                    number1 = "";
+                    number2 = "";
+                    operator = "";
+                    isSecondNumber = false;
+                    display.textContent = "";
+                    justCalculated = false;
+                }
                 if (!isSecondNumber) {
-                    number1 = button.innerHTML;
-                    isSecondNumber = true;
-                    console.log("Number 1: ", number1);
-                    operand1.textContent = number1;
-                    display.appendChild(operand1);
+                    if (!operator) {
+                        number1 += button.innerHTML;
+                        console.log("Number 1: ", number1);
+                        operand1.textContent = number1;
+                        display.appendChild(operand1);
+                    }
                 }
                 else {
-                    number2 = button.innerHTML;
+                    number2 += button.innerHTML;
                     console.log("Number 2: ", number2);
                     operand2.textContent = number2;
                     display.appendChild(operand2);
@@ -116,4 +194,3 @@ buttons.forEach(button => {
         }
     });
 });
-

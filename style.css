@@ -58,10 +58,16 @@ button.divide{
 
 button.clear{
     width: 140px;
+    background-color: orange;
+    border-color: orange;
+    border-style: solid;
 }
 
 button.backspace{
     width: 140px;
+    background-color: orange;
+    border-color: orange;
+    border-style: solid;
 }
 
 .second-row{
