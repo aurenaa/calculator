@@ -1,0 +1,96 @@
+body{
+    justify-items: center;
+    margin-top: 100px;
+}
+
+.outer-container{
+    background-color: rgb(90,90,103);
+    width: 300px;
+    height: 390px;
+    border-color: rgb(90,90,103);
+    border-style: solid;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.screen{
+    background-color: rgb(193,215,151);
+    width: 280px;
+    height: 60px;
+    border-color: rgb(193,215,151);
+    border-style: solid;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+button{
+    background-color: rgb(61,64,73);
+    border-color: rgb(61,64,73);
+    border-style: solid;
+    border-radius: 10px;
+    height: 65px;
+    width: 65px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+button.divide{
+    background-color: rgb(188,193,199);
+    border-color: rgb(188,193,199);
+}
+
+.first-row{
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin-top: 10px;
+}
+
+.second-row{
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin-top: 8px;
+}
+
+button.multiply{
+    background-color: rgb(188,193,199);
+    border-color: rgb(188,193,199);
+}
+
+.third-row{
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin-top: 10px;
+}
+
+button.sub{
+    background-color: rgb(188,193,199);
+    border-color: rgb(188,193,199);
+}
+
+.fourth-row{
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin-top: 10px;
+}
+
+button.period{
+    background-color: rgb(188,193,199);
+    border-color: rgb(188,193,199);
+}
+
+button.equal{
+    background-color: rgb(188,193,199);
+    border-color: rgb(188,193,199);
+}
+
+button.add{
+    background-color: rgb(188,193,199);
+    border-color: rgb(188,193,199);
+}
