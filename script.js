@@ -1,6 +1,6 @@
 let number1 = "";
 let number2 = "";
-let operator;
+let operator = "";
 let isSecondNumber = false;
 let calculated = false;
 let result;
@@ -58,7 +58,7 @@ function clearEverything() {
     screenResult.textContent = "";
 }
 
-function updateDisplay(){
+function updateDisplay() { //for backspace
     display.innerHTML = "";
     if (number1) {
         display.appendChild(operand1);
@@ -69,6 +69,17 @@ function updateDisplay(){
     if (number2) {
         display.appendChild(operand2);
     }
+}
+
+function computeAndShowResult() { //computing after pressing a new operator
+    display.innerHTML = "";
+    number1 = parseFloat(number1);
+    number2 = parseFloat(number2);
+    const result = operate(number1, number2, operator);
+    number1 = result;
+    number2 = "";
+    operand1.textContent = number1;
+    display.appendChild(operand1);
 }
 
 const buttons = document.querySelectorAll("button");
@@ -94,7 +105,7 @@ buttons.forEach(button => {
                 else {
                     number1 = number1.slice(0, -1);
                     operand1.textContent = number1;
-                    if (number1 == "" || operand1 == "") {
+                    if (number1 == "" || operand1 == "") { //backspace-ing the whole expression
                         clearEverything();
                     }
                 }
@@ -102,18 +113,7 @@ buttons.forEach(button => {
                 break;
             case "÷":
                 if (operator){
-                    display.textContent = "";
-                    number1 = parseFloat(number1);
-                    number2 = parseFloat(number2);
-                    const result = operate(number1, number2, operator);
-                    screenResult.textContent = result;
-                    display.appendChild(screenResult);
-                    number1 = result;
-                    number2 = "";
-                    screenOperator.textContent = "÷";
-                    display.appendChild(screenOperator);
-                    isSecondNumber = false;
-                    break;
+                    computeAndShowResult();
                 }
                 operator = "÷";
                 screenOperator.textContent = "÷";
@@ -122,18 +122,7 @@ buttons.forEach(button => {
                 break;
             case "x":
                 if (operator){
-                    display.textContent = "";
-                    number1 = parseFloat(number1);
-                    number2 = parseFloat(number2);
-                    const result = operate(number1, number2, operator);
-                    screenResult.textContent = result;
-                    display.appendChild(screenResult);
-                    number1 = result;
-                    number2 = "";
-                    screenOperator.textContent = "x";
-                    display.appendChild(screenOperator);
-                    isSecondNumber = false;
-                    break;
+                    computeAndShowResult();
                 }
                 operator = "x";
                 screenOperator.textContent = "x";
@@ -142,51 +131,16 @@ buttons.forEach(button => {
                 break;
             case "-":
                 if (operator) {
-                    display.textContent = "";
-                    number1 = parseFloat(number1);
-                    number2 = parseFloat(number2);
-                    const result = operate(number1, number2, operator);
-                    screenResult.textContent = result;
-                    display.appendChild(screenResult);
-                    number1 = result;
-                    number2 = "";
-                    screenOperator.textContent = "-";
-                    display.appendChild(screenOperator);
-                    isSecondNumber = false;
-                    break;
+                    computeAndShowResult();
                 }
-                else if (calculated) {
-                    calculated = false;
-                    isSecondNumber = true;
-                    number1 = result;
-                    number2 = "";
-                    operator = "";
-                    operand1.textContent = number1;
-                    operand2.textContent = "";
-                    screenOperator.textContent = "-";
-                    display.appendChild(screenOperator);
-                }
-                else {
-                    operator = "-";
-                    screenOperator.textContent = "-";
-                    display.appendChild(screenOperator);
-                    isSecondNumber = true;
-                    break;
-                }
+                operator = "-";
+                screenOperator.textContent = "-";
+                display.appendChild(screenOperator);
+                isSecondNumber = true;
+                break;
             case "+":
                 if (operator){
-                    display.textContent = "";
-                    number1 = parseFloat(number1);
-                    number2 = parseFloat(number2);
-                    const result = operate(number1, number2, operator);
-                    screenResult.textContent = result;
-                    display.appendChild(screenResult);
-                    number1 = result;
-                    number2 = "";
-                    screenOperator.textContent = "+";
-                    display.appendChild(screenOperator);
-                    isSecondNumber = false;
-                    break;
+                    computeAndShowResult();
                 }
                 operator = "+";
                 screenOperator.textContent = "+";
@@ -198,7 +152,8 @@ buttons.forEach(button => {
                 if (number1 && number2 && operator) {
                     number1 = parseFloat(number1);
                     number2 = parseFloat(number2);
-                    const result = operate(number1, number2, operator);
+                    const resultRaw = operate(number1, number2, operator);
+                    const result = Number(resultRaw.toFixed(10));
                     screenResult.textContent = result;
                     display.textContent = "";
                     display.appendChild(screenResult);
@@ -209,14 +164,6 @@ buttons.forEach(button => {
                 operator = ".";
                 break;
             default:
-                if (calculated) {
-                    number1 = "";
-                    number2 = "";
-                    operator = "";
-                    isSecondNumber = false;
-                    calculated = false;
-                    display.textContent = "";
-                }
                 if (!isSecondNumber) {
                     number1 += button.innerHTML;
                     operand1.textContent = number1;
