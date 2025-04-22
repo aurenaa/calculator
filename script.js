@@ -165,9 +165,27 @@ buttons.forEach(button => {
                     calculated = true;
                 }
                 break;
-            case ".":
-                operator = ".";
-                break;
+                case ".":
+                    if (!isSecondNumber) {
+                        if (!number1) {
+                            number1 = "0.";
+                        } 
+                        else if (!operand1.textContent.includes(".")) {
+                            number1 += ".";
+                        }
+                        operand1.textContent = number1;
+                    } 
+                    else {
+                        if (!number2) {
+                            number2 = "0.";
+                        } 
+                        else if (!operand2.textContent.includes(".")) {
+                            number2 += ".";
+                        }
+                        operand2.textContent = number2;
+                    }
+                    updateDisplay();
+                    break;
             default:
                 if (calculated) {
                     clearEverything();
