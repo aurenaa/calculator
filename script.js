@@ -3,6 +3,7 @@ let number2 = "";
 let operator;
 let isSecondNumber = false;
 let calculated = false;
+let result;
 
 function add(a, b){
     return a + b;
@@ -44,36 +45,60 @@ const operand2 = document.createElement("div");
 const screenOperator = document.createElement("div");
 const screenResult = document.createElement("div");
 
+function clearEverything() {
+    number1 = "";
+    number2 = "";
+    operator = "";
+    calculated = false;
+    isSecondNumber = false;
+    display.textContent = "";
+    operand1.textContent = "";
+    operand2.textContent = "";
+    screenOperator.textContent = "";
+    screenResult.textContent = "";
+}
+
+function updateDisplay(){
+    display.innerHTML = "";
+    if (number1) {
+        display.appendChild(operand1);
+    }
+    if (operator) {
+        display.appendChild(screenOperator);
+    }
+    if (number2) {
+        display.appendChild(operand2);
+    }
+}
+
 const buttons = document.querySelectorAll("button");
 buttons.forEach(button => {
     button.addEventListener("click", () => {
         switch(button.innerHTML) {
             case "C":
-                number1 = "";
-                number2 = "";
-                operator = "";
-                display.textContent = "";
-                isSecondNumber = false;
+                clearEverything();
                 break;
             case "←":
-                if (screenResult.textContent != "") {
-                    number1 = "";
-                    number2 = "";
-                    operator = "";
-                    display.textContent = "";
-                    isSecondNumber = false;
+                if (calculated) { //only the final result needs to be cleared
+                    clearEverything(); 
                     break;
-                }
-            
-                if (isSecondNumber && number2 !== "") {
+                } //if there is a second number delete it first
+                if (operand2.textContent != "") {
                     number2 = number2.slice(0, -1);
                     operand2.textContent = number2;
-                    display.textContent = number1 + operator + number2;
-                } else if (!isSecondNumber && number1 !== "") {
+                } //if there is no second number but there is an operator delete it
+                else if (screenOperator.textContent !== ""){
+                    operator = "";
+                    screenOperator.textContent = "";
+                } //if there is no second number and no operator, delete the first one
+                else {
                     number1 = number1.slice(0, -1);
                     operand1.textContent = number1;
-                    display.textContent = number1;
+                    if (number1 == "" || operand1 == "") {
+                        clearEverything();
+                    }
                 }
+                updateDisplay();
                 break;
             case "÷":
                 if (operator){
@@ -88,6 +113,7 @@ buttons.forEach(button => {
                     screenOperator.textContent = "÷";
                     display.appendChild(screenOperator);
                     isSecondNumber = false;
+                    break;
                 }
                 operator = "÷";
                 screenOperator.textContent = "÷";
@@ -107,6 +133,7 @@ buttons.forEach(button => {
                     screenOperator.textContent = "x";
                     display.appendChild(screenOperator);
                     isSecondNumber = false;
+                    break;
                 }
                 operator = "x";
                 screenOperator.textContent = "x";
@@ -114,7 +141,7 @@ buttons.forEach(button => {
                 isSecondNumber = true;
                 break;
             case "-":
-                if (operator){
+                if (operator) {
                     display.textContent = "";
                     number1 = parseFloat(number1);
                     number2 = parseFloat(number2);
@@ -126,6 +153,18 @@ buttons.forEach(button => {
                     screenOperator.textContent = "-";
                     display.appendChild(screenOperator);
                     isSecondNumber = false;
+                    break;
+                }
+                else if (calculated) {
+                    calculated = false;
+                    isSecondNumber = true;
+                    number1 = result;
+                    number2 = "";
+                    operator = "";
+                    operand1.textContent = number1;
+                    operand2.textContent = "";
+                    screenOperator.textContent = "-";
+                    display.appendChild(screenOperator);
                 }
                 else {
                     operator = "-";
@@ -147,6 +186,7 @@ buttons.forEach(button => {
                     screenOperator.textContent = "+";
                     display.appendChild(screenOperator);
                     isSecondNumber = false;
+                    break;
                 }
                 operator = "+";
                 screenOperator.textContent = "+";
@@ -174,23 +214,21 @@ buttons.forEach(button => {
                     number2 = "";
                     operator = "";
                     isSecondNumber = false;
+                    calculated = false;
                     display.textContent = "";
-                    justCalculated = false;
                 }
                 if (!isSecondNumber) {
-                    if (!operator) {
-                        number1 += button.innerHTML;
-                        console.log("Number 1: ", number1);
-                        operand1.textContent = number1;
-                        display.appendChild(operand1);
-                    }
-                }
-                else {
+                    number1 += button.innerHTML;
+                    operand1.textContent = number1;
+                    display.textContent = number1;
+                    console.log("Number1: ", number1);
+                } else {
                     number2 += button.innerHTML;
-                    console.log("Number 2: ", number2);
                     operand2.textContent = number2;
-                    display.appendChild(operand2);
+                    display.textContent = number1 + operator + number2;
+                    console.log("Number2 :", number2);
                 }
+                break;
         }
     });
 });
