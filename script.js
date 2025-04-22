@@ -51,7 +51,7 @@ function clearEverything() {
     operator = "";
     calculated = false;
     isSecondNumber = false;
-    display.textContent = "";
+    display.textContent = "0";
     operand1.textContent = "";
     operand2.textContent = "";
     screenOperator.textContent = "";
@@ -69,6 +69,10 @@ function updateDisplay() { //for backspace
     if (number2) {
         display.appendChild(operand2);
     }
+
+    if (!number1 && !operator && !number2) {
+        display.textContent = "0";
+    }
 }
 
 function computeAndShowResult() { //computing after pressing a new operator
@@ -80,6 +84,7 @@ function computeAndShowResult() { //computing after pressing a new operator
     number2 = "";
     operand1.textContent = number1;
     display.appendChild(operand1);
+    calculated = false;
 }
 
 const buttons = document.querySelectorAll("button");
@@ -112,7 +117,7 @@ buttons.forEach(button => {
                 updateDisplay();
                 break;
             case "÷":
-                if (operator){
+                if (operator && number2){
                     computeAndShowResult();
                 }
                 operator = "÷";
@@ -121,7 +126,7 @@ buttons.forEach(button => {
                 isSecondNumber = true;
                 break;
             case "x":
-                if (operator){
+                if (operator && number2){
                     computeAndShowResult();
                 }
                 operator = "x";
@@ -130,7 +135,7 @@ buttons.forEach(button => {
                 isSecondNumber = true;
                 break;
             case "-":
-                if (operator) {
+                if (operator && number2) {
                     computeAndShowResult();
                 }
                 operator = "-";
@@ -139,7 +144,7 @@ buttons.forEach(button => {
                 isSecondNumber = true;
                 break;
             case "+":
-                if (operator){
+                if (operator && number2){
                     computeAndShowResult();
                 }
                 operator = "+";
@@ -164,12 +169,16 @@ buttons.forEach(button => {
                 operator = ".";
                 break;
             default:
+                if (calculated) {
+                    clearEverything();
+                }
                 if (!isSecondNumber) {
                     number1 += button.innerHTML;
                     operand1.textContent = number1;
                     display.textContent = number1;
                     console.log("Number1: ", number1);
-                } else {
+                } 
+                else {
                     number2 += button.innerHTML;
                     operand2.textContent = number2;
                     display.textContent = number1 + operator + number2;
